@@ -36,11 +36,16 @@ public class BookController {
 
     }
     @PostMapping (path = "/update/{id}")
-    public ResponseEntity updateBook(@@RequestBody Book book){
-        Book _book = bookService.updateBook(book);
-        return _book != null ? new ResponseEntity<>(_book, HttpStatus.CREATED) :
-                new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity updateBook(@PathVariable long id, @RequestBody Book book){
+        return bookService.updateBook(id, book)? new ResponseEntity<>(HttpStatus.CREATED) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+    }
+
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity deleteBook(@PathVariable long id){
+        bookService.deleteBook(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

@@ -9,5 +9,5 @@ public interface IBookService {
     Book getBookById(long id);
     Book addBook(Book book);
     boolean updateBook(long id, Book book);
-    boolean deleteBook(long id);
+    void deleteBook(long id);
 }

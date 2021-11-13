@@ -44,13 +44,10 @@ public class BookServiceImpl implements IBookService{
     }
 
     @Override
-    public boolean deleteBook(long id) {
-        Optional<Book> newBook = bookRepository.findById(id);
-        if(!newBook.isPresent()){
-            return false;
-        }
-        bookRepository.delete(newBook.get());
-        return true;
+    public void deleteBook(long id) {
+        Book book = bookRepository.findById(id).get();
+
+        bookRepository.delete(book);
 
     }
 }
