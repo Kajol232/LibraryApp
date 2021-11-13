@@ -3,12 +3,9 @@ package com.muhammad.libraryapp.service;
 
 import com.muhammad.libraryapp.model.Book;
 import com.muhammad.libraryapp.model.Category;
-import com.muhammad.libraryapp.model.dtos.CategoryDTO;
 import com.muhammad.libraryapp.repositories.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 

@@ -1,7 +1,6 @@
 package com.muhammad.libraryapp.service;
 
 import com.muhammad.libraryapp.model.Category;
-import com.muhammad.libraryapp.model.dtos.CategoryDTO;
 
 import java.util.List;
 

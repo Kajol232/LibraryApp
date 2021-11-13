@@ -1,10 +1,7 @@
 package com.muhammad.libraryapp.controller;
 
 import com.muhammad.libraryapp.model.Category;
-import com.muhammad.libraryapp.model.dtos.CategoryDTO;
-import com.muhammad.libraryapp.model.dtos.UpdateDTO;
 import com.muhammad.libraryapp.service.CategoryServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
