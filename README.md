@@ -21,6 +21,14 @@ or download the project zip file on https://github.com/Kajol232/LibraryApp/
 - spring.datasource.username = [your username]
 - spring.datasource.password = [your password]
 
+or use H2 Database by setting copying and replace above settings with below
+
+- spring.datasource.url=jdbc:h2:mem:testdb
+- spring.datasource.driverClassName=org.h2.Driver
+- spring.datasource.username=sa
+- spring.datasource.password=password
+- spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+
 ## Run Application
 
 You can either run the application locally on any IDE preferable Intellij Idea or with below command via command line;
@@ -30,4 +38,4 @@ You can either run the application locally on any IDE preferable Intellij Idea o
 
 ## API Documentation
 
-Access the api documentation on http://localhost:8083/api/swagger-ui.html#
+Access the api documentation on http://localhost:8083/swagger-ui.html#

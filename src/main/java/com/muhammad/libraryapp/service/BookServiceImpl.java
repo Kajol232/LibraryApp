@@ -1,15 +1,21 @@
 package com.muhammad.libraryapp.service;
 
 import com.muhammad.libraryapp.model.Book;
+import com.muhammad.libraryapp.model.dtos.BookDTO;
 import com.muhammad.libraryapp.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class BookServiceImpl implements IBookService{
-    @Autowired
-    private static BookRepository bookRepository;
+    private final BookRepository bookRepository;
+
+    public BookServiceImpl(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
 
     @Override
     public List<Book> getBooks() {
@@ -22,21 +28,18 @@ public class BookServiceImpl implements IBookService{
     }
 
     @Override
-    public Book addBook(Book book) {
-        return bookRepository.save(book);
+    public Book addBook(BookDTO bookDTO) {
+        Book book = new Book();
+        return bookRepository.save(setBook(book, bookDTO));
     }
 
     @Override
-    public boolean updateBook(long id, Book book) {
+    public boolean updateBook(long id, BookDTO bookDTO) {
         Optional<Book> newBook = bookRepository.findById(id);
         if(!newBook.isPresent()){
             return false;
         }
-        Book b = newBook.get();
-        b.setAuthor(book.getAuthor());
-        b.setTitle(book.getTitle());
-        b.setDescription(book.getDescription());
-        b.setFavourite(book.isFavourite());
+        Book b = setBook(newBook.get(), bookDTO);
         bookRepository.save(b);
         return true;
 
@@ -63,6 +66,15 @@ public class BookServiceImpl implements IBookService{
 
     @Override
     public List<Book> getFavouriteList(){
-        return bookRepository.findAllByFavouriteIsTrue();
+        return bookRepository.findAllByIsFavouriteIsTrue();
+    }
+
+    private Book setBook(Book book, BookDTO bookDTO){
+        book.setAuthor(bookDTO.getAuthor());
+        book.setTitle(bookDTO.getTitle());
+        book.setDescription(bookDTO.getDescription());
+        book.setFavourite(bookDTO.isFavourite());
+        return book;
+
     }
 }

@@ -3,18 +3,24 @@ package com.muhammad.libraryapp.service;
 
 import com.muhammad.libraryapp.model.Book;
 import com.muhammad.libraryapp.model.Category;
+import com.muhammad.libraryapp.model.dtos.CategoryDTO;
 import com.muhammad.libraryapp.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CategoryServiceImpl implements ICategoryService{
-    @Autowired
-    private static CategoryRepository categoryRepository;
-    @Autowired
-    private static BookServiceImpl bookService;
+    private final CategoryRepository categoryRepository;
+    private final BookServiceImpl bookService;
+
+    public CategoryServiceImpl(CategoryRepository categoryRepository, BookServiceImpl bookService) {
+        this.categoryRepository = categoryRepository;
+        this.bookService = bookService;
+    }
 
     @Override
     public List<Category> getCategories() {
@@ -27,19 +33,21 @@ public class CategoryServiceImpl implements ICategoryService{
     }
 
     @Override
-    public Category addCategory(Category category) {
+    public Category addCategory(String name) {
+
+        Category category = new Category();
+        category.setName(name);
         return categoryRepository.save(category);
     }
 
     @Override
-    public boolean updateCategory(long id, Category category) {
+    public boolean updateCategory(long id, String name) {
         Optional<Category> newCategory = categoryRepository.findById(id);
         if(!newCategory.isPresent()){
             return false;
         }
         Category c = newCategory.get();
-        c.setName(category.getName());
-        c.setBooks(category.getBooks());
+        c.setName(name);
         categoryRepository.save(c);
 
         return true;

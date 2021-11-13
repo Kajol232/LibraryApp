@@ -1,9 +1,12 @@
 package com.muhammad.libraryapp.controller;
 
 import com.muhammad.libraryapp.model.Book;
+import com.muhammad.libraryapp.model.dtos.BookDTO;
+import com.muhammad.libraryapp.model.dtos.UpdateDTO;
 import com.muhammad.libraryapp.service.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,15 +15,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/books")
 public class BookController {
-    @Autowired
-    private static BookServiceImpl bookService;
+    private final BookServiceImpl bookService;
 
-    @GetMapping
+    public BookController(BookServiceImpl bookService) {
+        this.bookService = bookService;
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Book> getBooks(){
         return bookService.getBooks();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Book> getBook(@PathVariable Long id){
         Book book = bookService.getBookById(id);
 
@@ -28,7 +34,7 @@ public class BookController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
-    @GetMapping(path = "/getFavourites")
+    @GetMapping(path = "/getFavourites", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Book>> getFavourites(){
         List<Book> favList = bookService.getFavouriteList();
 
@@ -37,16 +43,18 @@ public class BookController {
 
 
     }
-    @PostMapping (path = "/add")
-    public ResponseEntity addBook(@RequestBody Book book){
-        Book _book = bookService.addBook(book);
+    @PostMapping (path = "/add", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity addBook(@RequestBody BookDTO bookDTO){
+        Book _book = bookService.addBook(bookDTO);
         return _book != null ? new ResponseEntity<>(_book, HttpStatus.CREATED) :
                 new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
-    @PutMapping (path = "/update/{id}")
-    public ResponseEntity updateBook(@PathVariable Long id, @RequestBody Book book){
-        return bookService.updateBook(id, book)? new ResponseEntity<>(HttpStatus.CREATED) :
+    @PutMapping (path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateBook(@PathVariable Long id, @RequestBody BookDTO bookDTO){
+        return bookService.updateBook(id, bookDTO)? new ResponseEntity<>(HttpStatus.CREATED) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
@@ -57,8 +65,8 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping(path = "/addToFavourites")
-    public ResponseEntity<List<Book>> addToFavourite(@RequestParam List<Long> bookIds ){
+    @PostMapping(path = "/addToFavourites", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Book>> addToFavourite(@RequestParam List<Long> bookIds){
         bookService.addBooksToFavouriteList(bookIds);
         return new ResponseEntity<>( HttpStatus.OK);
 

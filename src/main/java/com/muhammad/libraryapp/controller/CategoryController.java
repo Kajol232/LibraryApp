@@ -1,9 +1,12 @@
 package com.muhammad.libraryapp.controller;
 
 import com.muhammad.libraryapp.model.Category;
+import com.muhammad.libraryapp.model.dtos.CategoryDTO;
+import com.muhammad.libraryapp.model.dtos.UpdateDTO;
 import com.muhammad.libraryapp.service.CategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,15 +15,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
-    @Autowired
-    private static CategoryServiceImpl categoryService;
+    private final CategoryServiceImpl categoryService;
 
-    @GetMapping
+    public CategoryController(CategoryServiceImpl categoryService) {
+        this.categoryService = categoryService;
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Category> getCategories(){
         return categoryService.getCategories();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Category> getCategory(@PathVariable Long id){
         Category category = categoryService.getCategoryById(id);
 
@@ -28,16 +34,16 @@ public class CategoryController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping(path = "/add")
-    public ResponseEntity addBook(@RequestBody Category category){
-        Category _category = categoryService.addCategory(category);
+    @PostMapping(path = "/add",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity addCategory(@RequestParam String name){
+        Category _category = categoryService.addCategory(name);
         return _category != null ? new ResponseEntity<>(_category, HttpStatus.CREATED) :
                 new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping(path = "/update/{id}" )
-    public ResponseEntity updateCategory(@PathVariable Long id, @RequestBody Category category){
-        return categoryService.updateCategory(id, category) ? new ResponseEntity<> (HttpStatus.NO_CONTENT) :
+    @PutMapping(path = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity updateCategory(@PathVariable Long id, @RequestParam String name){
+        return categoryService.updateCategory(id, name) ? new ResponseEntity<> (HttpStatus.NO_CONTENT) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -47,7 +53,7 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping(path = "/addBooks/{id}")
+    @PatchMapping(path = "/addBooks/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addBooksToCategory(@PathVariable Long id, @RequestParam List<Long> bookIds){
         Category c = categoryService.addBooksToCategory(bookIds, id);
 
