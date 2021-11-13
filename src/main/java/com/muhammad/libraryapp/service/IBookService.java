@@ -10,4 +10,7 @@ public interface IBookService {
     Book addBook(Book book);
     boolean updateBook(long id, Book book);
     void deleteBook(long id);
+    void addBooksToFavouriteList(List<Long> bookIds);
+    List<Book> getFavouriteList();
+
 }

@@ -28,6 +28,15 @@ public class BookController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
+    @GetMapping(path = "/getFavourites")
+    public ResponseEntity<List<Book>> getFavourites(){
+        List<Book> favList = bookService.getFavouriteList();
+
+        return favList.size() > 0 ? new ResponseEntity<>(favList, HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+
+    }
     @PostMapping (path = "/add")
     public ResponseEntity addBook(@RequestBody Book book){
         Book _book = bookService.addBook(book);
@@ -35,8 +44,8 @@ public class BookController {
                 new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
-    @PostMapping (path = "/update/{id}")
-    public ResponseEntity updateBook(@PathVariable long id, @RequestBody Book book){
+    @PutMapping (path = "/update/{id}")
+    public ResponseEntity updateBook(@PathVariable Long id, @RequestBody Book book){
         return bookService.updateBook(id, book)? new ResponseEntity<>(HttpStatus.CREATED) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -48,4 +57,11 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping(path = "/addToFavourites")
+    public ResponseEntity<List<Book>> addToFavourite(@RequestParam List<Long> bookIds ){
+        bookService.addBooksToFavouriteList(bookIds);
+        return new ResponseEntity<>( HttpStatus.OK);
+
+
+    }
 }

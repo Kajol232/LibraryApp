@@ -36,7 +36,7 @@ public class BookServiceImpl implements IBookService{
         b.setAuthor(book.getAuthor());
         b.setTitle(book.getTitle());
         b.setDescription(book.getDescription());
-        b.setCategories(book.getCategories());
+        b.setFavourite(book.isFavourite());
         bookRepository.save(b);
         return true;
 
@@ -49,5 +49,20 @@ public class BookServiceImpl implements IBookService{
 
         bookRepository.delete(book);
 
+    }
+    @Override
+    public void addBooksToFavouriteList(List<Long> bookIds){
+        for(Long l : bookIds){
+            Book book = getBookById(l);
+            if(book != null){
+                book.setFavourite(true);
+                bookRepository.save(book);
+            }
+        }
+    }
+
+    @Override
+    public List<Book> getFavouriteList(){
+        return bookRepository.findAllByFavouriteIsTrue();
     }
 }

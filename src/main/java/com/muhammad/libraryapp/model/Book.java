@@ -16,14 +16,7 @@ public class Book {
     private String title;
     private String Author;
     private String description;
-    @Nullable
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-          name = "books_categories",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> categories;
+    private boolean isFavourite;
     @CreationTimestamp
     private LocalDateTime creationDate;
     @UpdateTimestamp
@@ -31,11 +24,11 @@ public class Book {
 
     public Book(){}
 
-    public Book(String title, String author, String description, List<Category> categories) {
+    public Book(String title, String author, String description, boolean isFavourite) {
         this.title = title;
         Author = author;
         this.description = description;
-        this.categories = categories;
+        this.isFavourite = isFavourite;
     }
 
     public long getId() {
@@ -66,11 +59,18 @@ public class Book {
         this.description = description;
     }
 
-    public List<Category> getCategories() {
-        return categories;
+    public boolean isFavourite() {
+        return isFavourite;
     }
 
-    public void setCategories(List<Category> categories) {
-        this.categories = categories;
+    public void setFavourite(boolean isFavourite) {
+        this.isFavourite = isFavourite;
+    }
+
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+    public LocalDateTime getLastUpdatedDate() {
+        return dateLastModified;
     }
 }
